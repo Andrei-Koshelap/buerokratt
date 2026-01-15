@@ -1,0 +1,19 @@
+{
+  "realm": "demo",
+  "enabled": true,
+  "displayName": "Demo Realm",
+  "sslRequired": "external",
+  "loginWithEmailAllowed": true,
+  "users": [
+    {
+      "username": "user",
+      "enabled": true,
+      "email": "user@example.com",
+      "firstName": "Demo",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    }
+  ]
+}

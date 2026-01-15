@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: buerokratt
+  datasource:
+    url: jdbc:postgresql://localhost:5432/saml_demo
+    username: saml
+    password: saml
+    driver-class-name: org.postgresql.Driver
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/seed.sql
+
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          kc:
+            entity-id: "urn:sp:saml-sp"
+            assertion-consumer-service:
+              location: "http://localhost:8080/login/saml2/sso/kc"
+            assertingparty:
+              # Keycloak IdP entityId обычно равно realm URL
+              entity-id: "http://localhost:8081/realms/demo"
+              sso-url: "http://localhost:8081/realms/demo/protocol/saml"
+              verification:
+                credentials:
+                  - certificate-location: "classpath:idp-signing.crt"
+
+logging:
+  level:
+    org.springframework.security.saml2: DEBUG
+    org.springframework.security: INFO
