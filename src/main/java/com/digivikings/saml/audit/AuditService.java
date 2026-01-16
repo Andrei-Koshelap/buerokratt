@@ -26,7 +26,7 @@ public class AuditService {
 
         String sql = """
       insert into auth_audit(external_id, email, event_type, idp_entity_id, session_id, ip, user_agent, correlation_id, details)
-      values (:external_id, :email, 'LOGIN_SUCCESS', :idp_entity_id, :session_id, :ip, :user_agent, :correlation_id, cast(:details as jsonb))
+      values (:external_id, :email, 'LOGIN_SUCCESS', :idp_entity_id, :session_id, :ip::inet, :user_agent, :correlation_id, cast(:details as jsonb))
     """;
 
         String corr = Optional.ofNullable(req.getHeader("X-Correlation-Id")).orElse(null);
@@ -39,7 +39,7 @@ public class AuditService {
         params.put("event_type", "LOGIN_SUCCESS");
         params.put("idp_entity_id", relyingPartyRegistrationId);
         params.put("session_id", req.getSession(false) != null ? req.getSession(false).getId() : null);
-        params.put("ip", req.getRemoteAddr());                   // inet —
+        params.put("ip", req.getRemoteAddr()); // "127.0.0.1" / "::1"
         params.put("user_agent", req.getHeader("User-Agent"));
         params.put("correlation_id", corr);
         params.put("details", detailsJson);
