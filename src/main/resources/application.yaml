@@ -1,5 +1,12 @@
 server:
   port: 8080
+  forward-headers-strategy: native
+  tomcat:
+    remoteip:
+      protocol-header: x-forwarded-proto
+      protocol-header-https-value: https
+      host-header: x-forwarded-host
+      port-header: x-forwarded-port
 
 spring:
   application:
@@ -20,17 +27,9 @@ spring:
     saml2:
       relyingparty:
         registration:
-          kc:
-            entity-id: "urn:sp:saml-sp"
+          entra:
             assertion-consumer-service:
-              location: "http://localhost:8080/login/saml2/sso/kc"
-            assertingparty:
-              # Keycloak IdP entityId equal realm URL commonly
-              entity-id: "http://localhost:8081/realms/demo"
-              sso-url: "http://localhost:8081/realms/demo/protocol/saml"
-              verification:
-                credentials:
-                  - certificate-location: "classpath:idp-signing.crt"
+              location: "https://eastbound-christine-overhurried.ngrok-free.dev/login/saml2/sso/entra"
 
 logging:
   level:

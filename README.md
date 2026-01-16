@@ -39,3 +39,13 @@ SYUxWojaGvPMGnEEp204ApomrkretdZmmDZoI68/vc+QKC3gaK9Jsmd4JIpHEPDc
 -----END CERTIFICATE-----
 
 Client → Keys / Signature
+
+
+
+ngrok http 8080
+this gives a public URL like https://abcd1234.ngrok.io which tunnels to your localhost:8080
+
+Identifier (Entity ID)
+urn:sp:saml-sp
+Reply URL (Assertion Consumer Service URL)
+https://eastbound-christine-overhurried.ngrok-free.dev/login/saml2/sso/entra

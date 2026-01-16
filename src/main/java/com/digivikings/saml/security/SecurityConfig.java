@@ -14,7 +14,7 @@ public class SecurityConfig {
             HttpSecurity http,
             RelyingPartyRegistrationRepository repo,
             SamlLoginSuccessHandler successHandler
-    ) throws Exception {
+    ) {
 
         http
                 .authorizeHttpRequests(auth -> auth
@@ -36,4 +36,8 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean
+//    ForwardedHeaderFilter forwardedHeaderFilter() {
+//        return new ForwardedHeaderFilter();
+//    }
 }
