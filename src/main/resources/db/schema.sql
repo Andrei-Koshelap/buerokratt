@@ -6,9 +6,9 @@ create table if not exists app_user (
                                         email         text,
                                         first_name    text,
                                         last_name     text,
-                                        last_login_at timestamptz,
-                                        created_at    timestamptz not null default now(),
-    updated_at    timestamptz not null default now()
+                                        last_login_at timestamptz null,
+                                        created_at timestamptz not null default now(),
+                                        updated_at timestamptz not null default now()
     );
 
 -- 2) Roles
@@ -41,8 +41,8 @@ create table if not exists  user_role_override (
 
 -- 5) Auth audit trail
 create table if not exists auth_audit (
-                                          id             bigserial primary key,
-                                          ts             timestamptz not null default now(),
+    id             bigserial primary key,
+    ts             timestamptz not null default now(),
     external_id    text,
     email          text,
     event_type     text not null,

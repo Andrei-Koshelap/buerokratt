@@ -5,20 +5,20 @@ import com.digivikings.saml.rbac.RbacService;
 import com.digivikings.saml.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.saml2.provider.service.authentication.Saml2AuthenticatedPrincipal;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.saml2.provider.service.authentication.Saml2AuthenticatedPrincipal;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SamlLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -40,15 +40,22 @@ public class SamlLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         Object principalObj = authentication.getPrincipal();
         if (!(principalObj instanceof Saml2AuthenticatedPrincipal principal)) {
-            // На всякий случай: если тип другой, просто редирект
+            // on any case
             response.sendRedirect("/private");
             return;
         }
 
         String externalId = principal.getName();
         String email = principal.getFirstAttribute("email");
-        String firstName = principal.getFirstAttribute("givenName");
-        String lastName = principal.getFirstAttribute("sn");
+        String firstName = Optional.ofNullable(principal.getFirstAttribute("givenName")).orElse("").toString();
+        String lastName  = Optional.ofNullable(principal.getFirstAttribute("sn")).orElse("").toString();
+
+
+        System.out.println("SAML name=" + principal.getName());
+        System.out.println("email=" + principal.getFirstAttribute("email"));
+        System.out.println("givenName=" + principal.getFirstAttribute("givenName"));
+        System.out.println("sn=" + principal.getFirstAttribute("sn"));
+        System.out.println("groups=" + principal.getAttribute("groups"));
 
         userService.upsertUser(externalId, email, firstName, lastName, Instant.now());
 

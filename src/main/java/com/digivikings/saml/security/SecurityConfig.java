@@ -18,7 +18,11 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/error").permitAll()
+                        .requestMatchers(
+                                "/", "/error",
+                                "/saml2/**",          // <- metadata + authenticate should be public
+                                "/login/saml2/**"     // <- ACS endpoint also available (POST from IdP)
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .saml2Login(saml -> saml
@@ -31,4 +35,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

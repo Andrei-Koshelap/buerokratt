@@ -18,7 +18,7 @@ public class PostgresRbacService implements RbacService {
     @Override
     public Set<String> resolveRoles(List<String> groupDns, String externalId) {
         if (groupDns == null || groupDns.isEmpty()) {
-            return Set.of("VIEWER"); // дефолт, или пусто
+            return Set.of("VIEWER"); // default
         }
 
         String sql = """
@@ -33,7 +33,6 @@ public class PostgresRbacService implements RbacService {
         List<String> roles = jdbc.query(sql, params,
                 (rs, rowNum) -> rs.getString("role_code"));
 
-        // Здесь же можно применить user_role_override (GRANT/REVOKE), если нужно.
         return new LinkedHashSet<>(roles);
     }
 }

@@ -1,14 +1,17 @@
 package com.digivikings.saml.security;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.digivikings.saml.rbac.RbacService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.saml2.provider.service.authentication.Saml2AuthenticatedPrincipal;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class SamlAuthoritiesMapper implements GrantedAuthoritiesMapper {
@@ -30,7 +33,10 @@ public class SamlAuthoritiesMapper implements GrantedAuthoritiesMapper {
     }
 
     public Collection<GrantedAuthority> mapFromPrincipal(Saml2AuthenticatedPrincipal principal) {
-        String externalId = principal.getName(); // часто NameID
+        String externalId = principal.getName(); // NameID ?
+        if (externalId == null || externalId.isBlank()) {
+            throw new IllegalArgumentException("externalId (NameID) is null/blank");
+        }
 
         List<String> groups = principal.getAttribute("groups");
         if (groups == null) groups = List.of();

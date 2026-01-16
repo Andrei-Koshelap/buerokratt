@@ -25,7 +25,7 @@ spring:
             assertion-consumer-service:
               location: "http://localhost:8080/login/saml2/sso/kc"
             assertingparty:
-              # Keycloak IdP entityId обычно равно realm URL
+              # Keycloak IdP entityId equal realm URL commonly
               entity-id: "http://localhost:8081/realms/demo"
               sso-url: "http://localhost:8081/realms/demo/protocol/saml"
               verification:
@@ -35,4 +35,4 @@ spring:
 logging:
   level:
     org.springframework.security.saml2: DEBUG
-    org.springframework.security: INFO
+    org.springframework.security.web: DEBUG

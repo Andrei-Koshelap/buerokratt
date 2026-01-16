@@ -1,11 +1,10 @@
 package com.digivikings.saml.user;
 
-import java.time.Instant;
-import java.util.Map;
-
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 public class PostgresUserService implements UserService {
@@ -54,12 +53,14 @@ public class PostgresUserService implements UserService {
         updated_at = now()
     """;
 
-        jdbc.update(sql, Map.of(
-                "external_id", externalId,
-                "email", email,
-                "first_name", firstName,
-                "last_name", lastName,
-                "last_login_at", loginTime
-        ));
+        var params = new java.util.HashMap<String, Object>();
+        params.put("external_id", externalId);
+        params.put("email", email);
+        params.put("first_name", firstName);
+        params.put("last_name", lastName);
+        params.put("last_login_at", loginTime == null ? null : java.sql.Timestamp.from(loginTime));
+        jdbc.update(sql, params);
+
+
     }
 }
